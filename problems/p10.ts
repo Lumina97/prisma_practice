@@ -16,7 +16,7 @@ export const deleteAllUsersWithAgeUnderN = async (n: number) => {
     })
   ).map((id) => id.id);
 
-  await prisma.starRating.deleteMany({
+  const deleteRatings = prisma.starRating.deleteMany({
     where: {
       userId: {
         in: idsToDelete,
@@ -24,11 +24,13 @@ export const deleteAllUsersWithAgeUnderN = async (n: number) => {
     },
   });
 
-  await prisma.user.deleteMany({
+  const deleteUsers = prisma.user.deleteMany({
     where: {
       id: {
         in: idsToDelete,
       },
     },
   });
+
+  await prisma.$transaction([deleteRatings, deleteUsers]);
 };
