@@ -1,6 +1,6 @@
 import { prisma } from "./prisma";
 
-export const updateUsername = async (userId: number, newUsername: string) => {
+export const updateUsername = (userId: number, newUsername: string) => {
   return prisma.user.update({
     where: {
       id: userId,

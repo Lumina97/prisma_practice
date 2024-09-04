@@ -1,7 +1,7 @@
 import { prisma } from "./prisma";
 
-const GetCritic = async (oder: "asc" | "desc") => {
-  return await prisma.starRating
+const GetCritic = (oder: "asc" | "desc") => {
+  return prisma.starRating
     .groupBy({
       by: ["userId"],
       _avg: {
@@ -12,17 +12,15 @@ const GetCritic = async (oder: "asc" | "desc") => {
           score: oder,
         },
       },
+      take: 1,
     })
     .then((result) => result[0].userId);
 };
 
-// Always tell truths, don't you ever lie, to solve this problem, just try a `groupBy`
-// find the critic with the lowest average score
-export const findTheGrumpiestCriticId = async () => {
+export const findTheGrumpiestCriticId = () => {
   return GetCritic("asc");
 };
 
-// find the critic with the highest average score
-export const findTheNicestCriticId = async () => {
+export const findTheNicestCriticId = () => {
   return GetCritic("desc");
 };
